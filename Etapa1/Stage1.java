@@ -9,6 +9,8 @@ import javax.swing.filechooser.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import javax.swing.JMenu;
+
 /* 
     El Metodo main tiene dos implementaciones, una de ellas comentada.
     Las componentes de Swing deben ser configuradas desde la hebra despachadora de eventos
@@ -22,13 +24,15 @@ import java.io.*;
 */
 
 public class Stage1 {
-   public static void main(String[] args) {
+   public static void main(String[] args)throws IOException{
       //RECETA PARA LA UTILIZACIÓN DE SWING
       SwingUtilities.invokeLater(new Runnable() {   // implementacion Swing recomendada: Creacion de hebra
             public void run() {// Codigo de la hebra
                MainFrame frame = new MainFrame();
                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+               frame.setLocation(350,50);
                frame.setVisible(true);
+               
             } // run ends
          });
     }
@@ -48,27 +52,77 @@ class MainFrame extends JFrame {
       setTitle("ELO329: Robots en Laberinto");
       setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
+      MyTime time = new MyTime();
+      Container contentPane = getContentPane();//Acceder al panel de contenidos del JFrame
+      contentPane.add(time.getView(),BorderLayout.SOUTH);
       // add Menu bar to frame
-      setJMenuBar(new MainMenuBar());
+      setJMenuBar(new MainMenuBar(contentPane));
+      
+      MainPanel Mapa = new MainPanel();
+      contentPane.add(Mapa);
+
    }
 
    public static final int DEFAULT_WIDTH = 600;
    public static final int DEFAULT_HEIGHT = 600;  
 }
 
-class MainMenuBar extends JMenuBar {
-   public MainMenuBar (){
+
+class MainMenuBar extends JMenuBar implements ActionListener{
+   public MainMenuBar (Container p){
+      parent = p;
      // menuBar = new JMenuBar();//Barra del menu
       menu = new JMenu("File");
+      menu.setMnemonic(KeyEvent.VK_F);
       this.add(menu);// Se agrega a la barra de menu del padre
-      //JMenuItem item = ...;
       item = new JMenuItem("Open");//Primera opcion del menu
+      item.setMnemonic(KeyEvent.VK_O);
       menu.add(item);
+      item.addActionListener(this);
       item = new JMenuItem("Compile");//Primera opcion del menu
+      item.setMnemonic(KeyEvent.VK_C);
       menu.add(item);
-      // to be coded
+      
+      menu = new JMenu("World");
+      menu.setMnemonic(KeyEvent.VK_W);
+      this.add(menu);// Se agrega a la barra de menu del padre
+      item = new JMenuItem("Create robot");//Primera opcion del menu
+      item.setMnemonic(KeyEvent.VK_R);
+      menu.add(item);
+      item = new JMenuItem("Set Delta t");//Primera opcion del menu
+      item.setMnemonic(KeyEvent.VK_S);
+      menu.add(item);
+      
+      fc = new JFileChooser();
+      fc.setCurrentDirectory(new File("C:"));
+      fc.setFileFilter(new FileNameExtensionFilter("PBM file", "pbm"));//filtro solo se debe poner extension
+      
+      
+      
    }
+   
+   public void actionPerformed(ActionEvent event){
+    String archivo;
+    File file;
+    int returnVal = fc.showOpenDialog(parent);
+    if(returnVal == JFileChooser.APPROVE_OPTION) {
+       System.out.println("You chose to open this file: " +
+            fc.getSelectedFile().getName());
+       file = fc.getSelectedFile();  
+       archivo=(String)fc.getSelectedFile().getName();
+       System.out.println(archivo);  
+       in = new Scanner(new File("C:\Users\LeonardoSolisZamora\Desktop\Universidad Técnico Federico Santa Maria\2018-1\POO\GIT_REP_II_\Etapa1\maze_in.pbm"));
+       //Maze laberinto= new Maze(in);
+    }
+    //in = new Scanner (new File(archivo));
+   }
+   
+   
+   
+   private Container parent;
+   private JFileChooser fc;
    JMenuBar menuBar;
    JMenu menu;
    JMenuItem item;
+   Scanner in;
 }
