@@ -18,6 +18,10 @@ public class Maze {
           sc.nextLine();
       int width = sc.nextInt();//Toma el ancho
       int hight = sc.nextInt();//Toma el largo
+      
+      this.Width=width;
+      this.High=hight;
+      
       sc.nextLine();
       array = new boolean [hight][];
       for (int h=0; h<hight; h++)
@@ -62,13 +66,18 @@ public class Maze {
       }   
    }
    
+   int getWidth(){
+      return this.Width;
+   }
    
+   int getHigh(){
+      return this.High;
+   }
    public void draw(Graphics2D g) {
-      MainPanel dibujo= new MainPanel();//llamo al dibujante
-      dibujo.setMaze(this);// le doy este laberinto
       
-      //to be coded
    }
    
    private boolean [][] array;
+   private int Width;
+   private int High;
 }
