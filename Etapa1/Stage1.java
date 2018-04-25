@@ -24,7 +24,7 @@ import javax.swing.JMenu;
 */
 
 public class Stage1 {
-   public static void main(String[] args)throws IOException{
+   public static void main(String[] args) throws IOException{
       //RECETA PARA LA UTILIZACIÓN DE SWING
       SwingUtilities.invokeLater(new Runnable() {   // implementacion Swing recomendada: Creacion de hebra
             public void run() {// Codigo de la hebra
@@ -110,8 +110,14 @@ class MainMenuBar extends JMenuBar implements ActionListener{
             fc.getSelectedFile().getName());
        file = fc.getSelectedFile();  
        archivo=(String)fc.getSelectedFile().getName();
-       System.out.println(archivo);  
-       in = new Scanner(new File("C:\Users\LeonardoSolisZamora\Desktop\Universidad Técnico Federico Santa Maria\2018-1\POO\GIT_REP_II_\Etapa1\maze_in.pbm"));
+       System.out.println(archivo);
+       try {
+          in = new Scanner(new File(archivo));
+       }
+       catch ( FileNotFoundException t ){  
+         
+       }  
+       
        //Maze laberinto= new Maze(in);
     }
     //in = new Scanner (new File(archivo));
@@ -126,3 +132,4 @@ class MainMenuBar extends JMenuBar implements ActionListener{
    JMenuItem item;
    Scanner in;
 }
+
