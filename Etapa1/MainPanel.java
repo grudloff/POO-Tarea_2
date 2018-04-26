@@ -30,5 +30,5 @@ public class MainPanel extends JPanel {
    
    private Maze maze;
    private static AffineTransform SCALE_TRANSFORM;
-   private static int SCALE=5;
+   private static double SCALE=2.6;
 }

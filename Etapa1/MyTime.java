@@ -5,6 +5,8 @@ public class MyTime {
    public MyTime () {
       playIcon = new ImageIcon("play-button.jpg");
       pauseIcon = new ImageIcon("pause.jpg");
+      playIcon.setImage(playIcon.getImage().getScaledInstance(40, 40, 1));
+      pauseIcon.setImage(pauseIcon.getImage().getScaledInstance(40, 40, 1));
       playing=false;
       view = new JButton(playIcon);
       
