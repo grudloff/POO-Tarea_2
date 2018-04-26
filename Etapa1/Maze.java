@@ -58,7 +58,6 @@ public class Maze {
    }
    
    public void draw(Graphics2D g) {
-      //to be coded
 	      for (int h=0; h<array.length; h++) 
 	          for (int w=0; w<array[0].length; w++)
 	        	  if  (array[h][w]) 

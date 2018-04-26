@@ -14,15 +14,16 @@ public class MainPanel extends JPanel {
    }
 
    public void setMaze(Maze m) {
-   // to be coded
 	   this.maze=m;
+	   // Para pintar al momento que se setea el maze, de lo contrario no se actualiza.
 	   repaint();
    }
    public void paintComponent(Graphics g) {
       super.paintComponent(g);
       Graphics2D g2 = (Graphics2D)g;
       g2.transform(SCALE_TRANSFORM);
-   // to be coded
+      
+      //Para evitar problemas previo a setear el maze.
       if (maze!=null)
          maze.draw(g2); 
       
