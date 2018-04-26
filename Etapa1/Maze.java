@@ -1,39 +1,33 @@
-/* ARCHIVO.PBM-->MAZE-->MAINPANEL-->STAGE1*/
 import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.Graphics2D.*;
+import javax.swing.*;
+import javax.swing.JComponent.*;
 
 public class Maze {
-
    protected Maze(){}
-   
    public Maze(Scanner sc) {
       read(sc);
    }
-   
-   public void read(Scanner sc){//Recoge sc para leerlo
+   public void read(Scanner sc){
       String s;
       while(!sc.hasNextInt())
           sc.nextLine();
-      int width = sc.nextInt();//Toma el ancho
-      int hight = sc.nextInt();//Toma el largo
-      
-      this.Width=width;
-      this.High=hight;
-      
+      int width = sc.nextInt();
+      int hight = sc.nextInt();
       sc.nextLine();
       array = new boolean [hight][];
       for (int h=0; h<hight; h++)
-         array[h] = new boolean[width];//va generando nuevos espacios ara booleanos
+         array[h] = new boolean[width];
       for (int h=0; h<hight; h++) 
          for (int w=0; w<width; ){
             s = sc.findInLine(".");
             if (s==null) sc.nextLine();
-            else array[h][w++] = s.charAt(0)=='1';//Genera un arreglo con booleanos igual al mapa  
+            else array[h][w++] = s.charAt(0)=='1';  
          }      
    }
-   
    protected Maze (Maze m){  // This is called copy constructor
       array = new boolean [m.array.length][];
       for (int h=0; h<array.length; h++)
@@ -42,19 +36,16 @@ public class Maze {
          for (int w=0; w<array[0].length; w++)
             array[h][w]=m.array[h][w];   
    }
-   
-   public boolean isThere_a_wall(int x, int y) {// 1: Hay muro; 0:No hay muro
+   public boolean isThere_a_wall(int x, int y) {
       if ((x < array.length) && (y < array[0].length) )
          return array[x][y];
       else return false;
    }
-   
    public void markPoint(Vector2D p){
       int x=(int)p.getX(), y=(int)p.getY();
       if ((x < array.length) && (y < array[0].length))
-           array[x][y]=true;// Marca los lugares en donde existe muralla
+           array[x][y]=true;
    }
-   
    public void write(PrintStream out){
       out.println("P1");
       out.println("#Created by "+getClass().getName()+"UTFSM ELO329");
@@ -66,18 +57,13 @@ public class Maze {
       }   
    }
    
-   int getWidth(){
-      return this.Width;
-   }
-   
-   int getHigh(){
-      return this.High;
-   }
    public void draw(Graphics2D g) {
-      
+      //to be coded
+	      for (int h=0; h<array.length; h++) 
+	          for (int w=0; w<array[0].length; w++)
+	        	  if  (array[h][w]) 
+	        			  g.fillRect(w,h,1,1);
+	        	  
    }
-   
    private boolean [][] array;
-   private int Width;
-   private int High;
 }

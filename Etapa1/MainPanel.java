@@ -1,29 +1,34 @@
 import java.awt.*;
+import java.awt.geom.*;
+
 import javax.swing.*;
+import javax.swing.JComponent.*;
 
 public class MainPanel extends JPanel {
    public MainPanel(){
       maze = null;
    }
+   
+   {
+	   SCALE_TRANSFORM= AffineTransform.getScaleInstance(SCALE,SCALE);
+   }
 
    public void setMaze(Maze m) {
-      this.maze=m;
-      this.repaint();
-   }
-   
-      
-   public void paintComponent(Graphics g) { //Metodo de la clase 
-      super.paintComponent(g);//llamar al metodo de la clase padre
-      Graphics2D g2 = (Graphics2D)g;
-      
-      g2.setStroke(new BasicStroke(5.0f)); // grosor de 5 pixels
-      g2.drawLine (10, 10, 100, 100);
-     
-      //this.maze.draw(g2);
-   //   g.drawRect(50,50,200,200);
    // to be coded
+	   this.maze=m;
+	   repaint();
+   }
+   public void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      Graphics2D g2 = (Graphics2D)g;
+      g2.transform(SCALE_TRANSFORM);
+   // to be coded
+      if (maze!=null)
+         maze.draw(g2); 
+      
    }
    
    private Maze maze;
-   
+   private static AffineTransform SCALE_TRANSFORM;
+   private static int SCALE=5;
 }
