@@ -15,8 +15,6 @@ public class MyTime {
         	playing=!playing;
         	if (playing) view.setIcon(pauseIcon);
             else view.setIcon(playIcon);
-                        
-        	 // to be coded
          }
       });
 

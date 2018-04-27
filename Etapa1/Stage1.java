@@ -56,29 +56,17 @@ class MainFrame extends JFrame {
       
 
       contentPane.add(M_panel);
+      
    }
 
    public static final int DEFAULT_WIDTH = 600;
    public static final int DEFAULT_HEIGHT = 600;
 }
-class RobotCreationListener implements ActionListener{
-	public RobotCreationListener(MyWorld p) {
-		world=p;
-	}
-	public void actionPerformed(ActionEvent e) {
-		Vector2D pos=new Vector2D(30,40);
-		Vector2D vel=new Vector2D(0,1);
-		Robot robot=new Robot(pos, vel, 3.0, world, true);
-		world.setRobot(robot);
-		System.out.println("FUNCION” CONCHETUMARE!");
-		
-	}
-	private MyWorld world;
-}
+
 
 class MainMenuBar extends JMenuBar implements ActionListener{
-   public MainMenuBar (MyWorld p){
-	  parent=p;
+   public MainMenuBar (MyWorld parent){
+	  this.parent=parent;
       JMenu menu1 = new JMenu("File");
       JMenu menu2 = new JMenu("World");
       add(menu1);
@@ -92,10 +80,11 @@ class MainMenuBar extends JMenuBar implements ActionListener{
       menu2.add(item_robot);
       menu2.add(item_delta_t);
       item_open.addActionListener(this);
-      item_robot.addActionListener(new RobotCreationListener(parent));
+      item_robot.addActionListener(new RobotCreationListener());
+      item_delta_t.addActionListener(new EntradaTexto());
       
       chooser=new JFileChooser();
-      chooser.setCurrentDirectory(new File("C:"));
+      chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
       chooser.setFileFilter(new FileNameExtensionFilter("PBM file","pbm"));
       }
    public void actionPerformed(ActionEvent event) {
@@ -115,11 +104,55 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 	       
 	       //Pasarle el maze a MainPanel
 	       parent.setMaze(maze);
+	       
+	       
 	       	       
 	       
 	    }
    }
    
+   class RobotCreationListener implements ActionListener{
+		public RobotCreationListener() {
+		}
+		public void actionPerformed(ActionEvent e) {
+			Vector2D pos=new Vector2D(30,40);
+			Vector2D vel=new Vector2D(0,1);
+			Robot robot=new Robot(pos, vel, 3.0, parent, true);
+			parent.setRobot(robot);
+			
+		}
+	}
+
+	class EntradaTexto implements ActionListener{
+		public EntradaTexto() {
+		}
+		public void actionPerformed(ActionEvent e) {
+			SwingUtilities.invokeLater(new Runnable() {   // implementaci√≥n Swing recomendada
+	            public void run() {
+	               final JDialog tframe = new JDialog();
+	               tframe.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	               tframe.setSize(150, 50);
+	               tframe.setVisible(true);
+	               final JTextField ventanaTexto=new JTextField("new delta_t value", 20);	               
+	               tframe.getContentPane().add(ventanaTexto);
+	               JButton boton=new JButton("ok!");
+	               tframe.getContentPane().add(boton, BorderLayout.PAGE_END);
+	               boton.addActionListener(new ActionListener() {
+	       			public void actionPerformed(ActionEvent e) {
+	       				delta_t=Double.parseDouble(ventanaTexto.getText());
+	       				tframe.dispose();
+	       				System.out.println(delta_t);
+	       				
+	       			}	       			      		
+	       		});
+
+	            } // run ends
+	         });
+			
+		}
+	}
+	
+   private double delta_t;
    private JFileChooser chooser;
    private MyWorld parent;
    private Scanner in;

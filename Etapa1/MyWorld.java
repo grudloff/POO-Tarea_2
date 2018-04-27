@@ -8,7 +8,6 @@ import java.util.*;
 public class MyWorld extends JPanel {
    public MyWorld(){
       maze = null;
-      robot=null;
    }
    
    {
@@ -22,6 +21,7 @@ public class MyWorld extends JPanel {
    // to be coded
 	   this.maze=m;
 	   repaint();
+	   
    }
    public void setRobot(Robot r) {
 	   this.robots.add(r);
@@ -33,9 +33,10 @@ public class MyWorld extends JPanel {
       super.paintComponent(g);
       Graphics2D g2 = (Graphics2D)g;
       g2.transform(SCALE_TRANSFORM);
-   // to be coded
-      if (maze!=null)
+      if (maze!=null) {
          maze.draw(g2);
+         
+         }
       if (robots!=null)
     	  for (int i=0;i<robots.size();i++) 
     		  robots.get(i).draw(g2);
@@ -43,10 +44,9 @@ public class MyWorld extends JPanel {
    }
    
    private Maze maze;
-   private Robot robot;
    private ArrayList<Robot> robots= new ArrayList<Robot> ();
    private static AffineTransform SCALE_TRANSFORM;
-   private static int SCALE=5;
+   private static double SCALE=3;
 }
 
 

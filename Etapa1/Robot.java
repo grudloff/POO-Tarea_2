@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Robot {
@@ -159,9 +160,44 @@ public void markRoute(Maze m){
 	      private static final double presition = 0.4;
    }
    
+   public class RobotView {
+		public RobotView() {}
+
+		public void draw(Graphics2D g) {
+			//Pintar cuerpo del robot
+			g.setColor(Color.orange);
+			int size_r=11;
+			g.fillOval((int)(pos.getX()-Math.floor(size_r*0.5)),(int)(pos.getY()-Math.floor(size_r*0.5)), size_r, size_r);
+			
+			Vector2D v;
+			int size_s=3;
+			
+			//pintar sensor frontal
+			g.setColor(Color.blue);
+			v=pos.plus( frontSensor.dir.times(4.0));
+			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)), size_s, size_s);
+			
+			//pintar sensor derecho
+			g.setColor(Color.blue);
+			v=pos.plus( rightSensor.dir.times(4.0));
+			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)),size_s,size_s);
+			
+			//pintar sensor izquierdo
+			g.setColor(Color.blue);
+			v=pos.plus( leftSensor.dir.times(4.0));
+			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)),size_s,size_s);
+			
+			//setea el color en su default
+			g.setColor(Color.black);
+			
+		}
+
+		 
+	}
+   
    public void draw(Graphics2D g) {
 	   RobotView view=new RobotView();
-	   view.draw(g,this);
+	   view.draw(g);
 	   }
       
    private Vector2D pos;
