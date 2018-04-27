@@ -46,7 +46,7 @@ class MainFrame extends JFrame {
    public MainFrame() {
       setTitle("ELO329: Robots en Laberinto");
       setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-      MainPanel M_panel= new MainPanel();
+      MyWorld M_panel= new MyWorld();
 
       // add Menu bar to frame
       setJMenuBar(new MainMenuBar(M_panel));
@@ -62,15 +62,22 @@ class MainFrame extends JFrame {
    public static final int DEFAULT_HEIGHT = 600;
 }
 class RobotCreationListener implements ActionListener{
-	public RobotCreationListener() {}
+	public RobotCreationListener(MyWorld p) {
+		world=p;
+	}
 	public void actionPerformed(ActionEvent e) {
+		Vector2D pos=new Vector2D(30,40);
+		Vector2D vel=new Vector2D(0,1);
+		Robot robot=new Robot(pos, vel, 3.0, world, true);
+		world.setRobot(robot);
 		System.out.println("FUNCIONÓ CONCHETUMARE!");
 		
 	}
+	private MyWorld world;
 }
 
 class MainMenuBar extends JMenuBar implements ActionListener{
-   public MainMenuBar (MainPanel p){
+   public MainMenuBar (MyWorld p){
 	  parent=p;
       JMenu menu1 = new JMenu("File");
       JMenu menu2 = new JMenu("World");
@@ -85,7 +92,7 @@ class MainMenuBar extends JMenuBar implements ActionListener{
       menu2.add(item_robot);
       menu2.add(item_delta_t);
       item_open.addActionListener(this);
-      item_robot.addActionListener(new RobotCreationListener());
+      item_robot.addActionListener(new RobotCreationListener(parent));
       
       chooser=new JFileChooser();
       chooser.setCurrentDirectory(new File("C:"));
@@ -114,7 +121,7 @@ class MainMenuBar extends JMenuBar implements ActionListener{
    }
    
    private JFileChooser chooser;
-   private MainPanel parent;
+   private MyWorld parent;
    private Scanner in;
    private Maze maze;
    
