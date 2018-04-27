@@ -17,6 +17,9 @@ public class Maze {
           sc.nextLine();
       int width = sc.nextInt();
       int hight = sc.nextInt();
+      
+      this.Width=width;
+      this.Height=hight;
       sc.nextLine();
       array = new boolean [hight][];
       for (int h=0; h<hight; h++)
@@ -64,5 +67,15 @@ public class Maze {
 	        			  g.fillRect(w,h,1,1);
 	        	  
    }
+   public int getWidth(){
+	      return this.Width;
+	   }
+	   
+   public int getHeight(){
+	      return this.Height;
+	   }
+	   
+   private int Width;
+   private int Height;
    private boolean [][] array;
 }

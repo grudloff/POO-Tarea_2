@@ -49,7 +49,7 @@ class MainFrame extends JFrame {
       MyWorld M_panel= new MyWorld();
 
       // add Menu bar to frame
-      setJMenuBar(new MainMenuBar(M_panel));
+      setJMenuBar(new MainMenuBar(M_panel, this));
       MyTime time= new MyTime();
       Container contentPane = getContentPane();
       contentPane.add(time.getView(), BorderLayout.SOUTH);
@@ -65,8 +65,9 @@ class MainFrame extends JFrame {
 
 
 class MainMenuBar extends JMenuBar implements ActionListener{
-   public MainMenuBar (MyWorld parent){
+   public MainMenuBar (MyWorld parent, MainFrame f){
 	  this.parent=parent;
+	  MyFrame=f;
       JMenu menu1 = new JMenu("File");
       JMenu menu2 = new JMenu("World");
       add(menu1);
@@ -103,7 +104,9 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 	       }
 	       
 	       //Pasarle el maze a MainPanel
-	       parent.setMaze(maze);
+	       parent.setMaze(maze, MyFrame);
+	       
+	       
 	       
 	       
 	       	       
@@ -114,11 +117,21 @@ class MainMenuBar extends JMenuBar implements ActionListener{
    class RobotCreationListener implements ActionListener{
 		public RobotCreationListener() {
 		}
+		
 		public void actionPerformed(ActionEvent e) {
+			String x=JOptionPane.showInputDialog("Velocidad X: ");
+			String y=JOptionPane.showInputDialog("Velocidad Y: ");
+			boolean turn;
+			int selection= JOptionPane.showOptionDialog(null, "\t Elegir el piloto para el robot", "Configuracion piloto",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] {"Apegado a la pared Izquierda","Apegado a la pared Derecha"}, "Apegado a la pared Derecha");
+			if (selection==0)
+				turn=true;
+			else
+				turn=false;
 			Vector2D pos=new Vector2D(30,40);
-			Vector2D vel=new Vector2D(0,1);
-			Robot robot=new Robot(pos, vel, 3.0, parent, true);
+			Vector2D vel=new Vector2D(Integer.parseInt(x),Integer.parseInt(y));
+			Robot robot=new Robot(pos, vel, 3.0, parent, turn);
 			parent.setRobot(robot);
+			
 			
 		}
 	}
@@ -152,11 +165,14 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 		}
 	}
 	
+	
+	
    private double delta_t;
    private JFileChooser chooser;
    private MyWorld parent;
    private Scanner in;
    private Maze maze;
+   private MainFrame MyFrame;
    
 }
 

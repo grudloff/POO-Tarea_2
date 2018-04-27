@@ -17,10 +17,12 @@ public class MyWorld extends JPanel {
 	   return maze.isThere_a_wall(x, y);
    }
 
-   public void setMaze(Maze m) {
+   public void setMaze(Maze m, MainFrame f) {
    // to be coded
 	   this.maze=m;
-	   repaint();
+	      setPreferredSize(new Dimension(m.getWidth()*SCALE, m.getHeight()*SCALE));
+	      f.pack();
+	      repaint();
 	   
    }
    public void setRobot(Robot r) {
@@ -46,7 +48,7 @@ public class MyWorld extends JPanel {
    private Maze maze;
    private ArrayList<Robot> robots= new ArrayList<Robot> ();
    private static AffineTransform SCALE_TRANSFORM;
-   private static double SCALE=3;
+   private static int SCALE=3;
 }
 
 
