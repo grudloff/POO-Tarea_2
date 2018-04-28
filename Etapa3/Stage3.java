@@ -50,7 +50,7 @@ class MainFrame extends JFrame {
       MyWorld M_panel= new MyWorld();
 
       // add Menu bar to frame
-      setJMenuBar(new MainMenuBar(M_panel, this));
+      setJMenuBar(new MainMenuBar(M_panel,this));
       MyTime time= new MyTime();
       Container contentPane = getContentPane();
       contentPane.add(time.getView(), BorderLayout.SOUTH);
@@ -66,9 +66,9 @@ class MainFrame extends JFrame {
 
 
 class MainMenuBar extends JMenuBar implements ActionListener{
-   public MainMenuBar (MyWorld parent, MainFrame f){
+   public MainMenuBar (MyWorld parent,JFrame jf){
 	  this.parent=parent;
-	  MyFrame=f;
+	  this.jf=jf;
       JMenu menu1 = new JMenu("File");
       JMenu menu2 = new JMenu("World");
       add(menu1);
@@ -105,10 +105,10 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 	       }
 	       
 	       //Pasarle el maze a MainPanel
-	       parent.setMaze(maze, MyFrame);
+	       parent.setMaze(maze);
 	       
-	       
-	       
+	       //Hace un resize para ajustar al contenido
+	       jf.pack();
 	       
 	       	       
 	       
@@ -129,32 +129,31 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 			else
 				turn=false;
 			Vector2D pos=new Vector2D(0,0);
-			Vector2D vel=new Vector2D(Integer.parseInt(x),Integer.parseInt(y));
+			Vector2D vel=new Vector2D(Double.parseDouble(x),Double.parseDouble(y));
 			Robot robot=new Robot(pos, vel, 3.0, parent, turn);
+			parent.setRobot(robot);
+			addMouseListener(new MouseMovement());
 			
-			addMouseListener(new MouseMovement(robot));
-			//parent.setRobot(robot);
 			}
 		public class MouseMovement extends JPanel implements MouseInputListener{
 			public int mX, mY;
-			public Robot rr;
-			public MouseMovement(Robot r) {
+			public MouseMovement() {
 				addMouseMotionListener(this);
 				addMouseListener(this);
 				setVisible(true);
-				rr=r;
 			}
 			
 			public void mouseMoved(MouseEvent mm) {
 				mX=(int) mm.getPoint().getX();
 				mY=(int) mm.getPoint().getY();
 				Vector2D mousePos=new Vector2D(mX,mY);
-				rr.setPosition(mousePos);
-				parent.paintRobot(rr);
+				System.out.println(""+mX+" "+mY);
+				//Esto evita que este fuera del maze y además que no este en una pared.
+				if(!parent.isThere_a_wall(mX,mY))
+					parent.setRobotPos(mousePos);
 				}
 			
 			public void mouseClicked(MouseEvent mm) {
-				parent.setRobot(rr);
 			}
 			
 			public void mouseDragged(MouseEvent mm) {}
@@ -176,10 +175,12 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 	               tframe.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	               tframe.setSize(150, 50);
 	               tframe.setVisible(true);
-	               final JTextField ventanaTexto=new JTextField("new delta_t value", 20);	               
+	               tframe.getContentPane().add(new JLabel("New Delta time value:"), BorderLayout.PAGE_START);
+	               final JTextField ventanaTexto=new JTextField(String.valueOf(delta_t), 20);	               
 	               tframe.getContentPane().add(ventanaTexto);
 	               JButton boton=new JButton("ok!");
 	               tframe.getContentPane().add(boton, BorderLayout.PAGE_END);
+	               tframe.pack();
 	               boton.addActionListener(new ActionListener() {
 	       			public void actionPerformed(ActionEvent e) {
 	       				delta_t=Double.parseDouble(ventanaTexto.getText());
@@ -196,13 +197,12 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 	}
 	
 	
-	
+	private JFrame jf;
    private double delta_t;
    private JFileChooser chooser;
    private MyWorld parent;
    private Scanner in;
    private Maze maze;
-   private MainFrame MyFrame;
    
 }
 

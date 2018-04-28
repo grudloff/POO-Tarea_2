@@ -38,7 +38,6 @@ public class MainPanel extends JPanel {
    }
    
    private Maze maze;
-   private ArrayList<Robot> robots= new ArrayList<Robot> ();
    private static AffineTransform SCALE_TRANSFORM;
    private static double SCALE=3;
 }
