@@ -5,7 +5,7 @@ public class Robot {
    private Robot() { 
       this(new Vector2D(), new Vector2D(), 0, null,false);
    }
-   public Robot(Vector2D position, Vector2D velocity, double sensorRange, MainPanel w,boolean u) {
+   public Robot(Vector2D position, Vector2D velocity, double sensorRange, MyWorld w,boolean u) {
 	   this.u=u;
 	   pos = position;
 	   v = velocity;
@@ -23,6 +23,9 @@ public class Robot {
 
 public Vector2D getPosition() {
    return pos;
+}
+public void setPosition(Vector2D p) {
+	pos=p;
 }
 public Vector2D getVelocity() {
    return v;
@@ -173,16 +176,34 @@ public void markRoute(Maze m){
 			int size_s=3;
 			
 			//pintar sensor frontal
+			/*if(r.getFrontSensor().senseWall()){
+		         g.setColor(Color.red);
+		      }
+		      else{
+				   g.setColor(Color.blue);
+		      }*/
 			g.setColor(Color.blue);
 			v=pos.plus( frontSensor.dir.times(4.0));
 			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)), size_s, size_s);
 			
 			//pintar sensor derecho
+			/*if(r.getRightSensor().senseWall()){
+		         g.setColor(Color.red);
+		      }
+		      else{
+				   g.setColor(Color.blue);
+		      }*/
 			g.setColor(Color.blue);
 			v=pos.plus( rightSensor.dir.times(4.0));
 			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)),size_s,size_s);
 			
 			//pintar sensor izquierdo
+			/*if(getLeftSensor().senseWall()){
+		         g.setColor(Color.red);
+		      }
+		      else{
+				   g.setColor(Color.blue);
+		      }*/
 			g.setColor(Color.blue);
 			v=pos.plus( leftSensor.dir.times(4.0));
 			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)),size_s,size_s);
@@ -202,7 +223,7 @@ public void markRoute(Maze m){
       
    private Vector2D pos;
    private Vector2D v;
-   private MainPanel world;
+   private MyWorld world;
    private DistanceSensor rightSensor, frontSensor, leftSensor;
    private MyPilot pilot;
    private boolean u;

@@ -36,14 +36,11 @@ public class Maze {
          for (int w=0; w<array[0].length; w++)
             array[h][w]=m.array[h][w];   
    }
-   
    public boolean isThere_a_wall(int x, int y) {
       if ((x < array.length) && (y < array[0].length) )
          return array[x][y];
-      else 
-         return false;
+      else return false;
    }
-   
    public void markPoint(Vector2D p){
       int x=(int)p.getX(), y=(int)p.getY();
       if ((x < array.length) && (y < array[0].length))

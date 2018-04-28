@@ -1,8 +1,0 @@
-Tarea 2: Aplicación Gráfica para Robots en Laberinto
-
-Clase Lunes 16 de Abril
-Dentro de un boton, se puede crear un JPanel. Se pueden generar Layout anidados.
-
-FlowLayout
-BorderLayout: Creación del boton play
-BoxLayout: 

@@ -5,7 +5,7 @@ public class Robot {
    private Robot() { 
       this(new Vector2D(), new Vector2D(), 0, null,false);
    }
-   public Robot(Vector2D position, Vector2D velocity, double sensorRange, MainPanel w,boolean u) {
+   public Robot(Vector2D position, Vector2D velocity, double sensorRange, MyWorld w,boolean u) {
 	   this.u=u;
 	   pos = position;
 	   v = velocity;
@@ -202,7 +202,7 @@ public void markRoute(Maze m){
       
    private Vector2D pos;
    private Vector2D v;
-   private MainPanel world;
+   private MyWorld world;
    private DistanceSensor rightSensor, frontSensor, leftSensor;
    private MyPilot pilot;
    private boolean u;

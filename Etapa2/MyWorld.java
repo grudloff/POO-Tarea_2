@@ -5,8 +5,8 @@ import javax.swing.*;
 import javax.swing.JComponent.*;
 import java.util.*;
 
-public class MainPanel extends JPanel {
-   public MainPanel(){
+public class MyWorld extends JPanel {
+   public MyWorld(){
       maze = null;
    }
    
@@ -21,9 +21,12 @@ public class MainPanel extends JPanel {
 	   this.maze=m;
 	   //Permite a .pack() del JFrame saber el tamaño
 	   this.setPreferredSize(new Dimension((int)(SCALE*maze.getHight()),(int)(SCALE*maze.getLength())));
-	   //Repinta todo para actualizar la vista
 	   repaint();
 	   
+   }
+   public void setRobot(Robot r) {
+	   this.robots.add(r);
+	   repaint();
    }
    
    
@@ -31,13 +34,18 @@ public class MainPanel extends JPanel {
       super.paintComponent(g);
       Graphics2D g2 = (Graphics2D)g;
       g2.transform(SCALE_TRANSFORM);
-      //Previo a setear un maze, maze es null
-      if (maze!=null)
+      if (maze!=null) {
          maze.draw(g2);
+         
+         }
+      if (robots!=null)
+    	  for (int i=0;i<robots.size();i++) 
+    		  robots.get(i).draw(g2);
       
    }
    
    private Maze maze;
+   private ArrayList<Robot> robots= new ArrayList<Robot> ();
    private static AffineTransform SCALE_TRANSFORM;
    private static double SCALE=3;
 }
