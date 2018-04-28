@@ -8,7 +8,6 @@ import java.util.*;
 public class MyWorld extends JPanel {
    public MyWorld(){
       maze = null;
-      mPos=null;
    }
    
    {
@@ -18,22 +17,19 @@ public class MyWorld extends JPanel {
 	   return maze.isThere_a_wall(x, y);
    }
 
-   public void setMaze(Maze m, MainFrame f) {
-   // to be coded
+   public void setMaze(Maze m) {
 	   this.maze=m;
-	   setPreferredSize(new Dimension(m.getWidth()*SCALE, m.getHeight()*SCALE));
-	   f.pack();
+	   //Permite a .pack() del JFrame saber el tamaño
+	   this.setPreferredSize(new Dimension((int)(SCALE*maze.getHight()),(int)(SCALE*maze.getLength())));
 	   repaint();
-	}
-   
-   public void paintRobot(Robot p) { //Va pintando el robot con el movimiento del mouse
-	   this.mPos=p;
-	   repaint();
+	   
    }
-   
    public void setRobot(Robot r) {
 	   this.robots.add(r);
-      
+	   repaint();
+   }
+   public void setRobotPos(Vector2D pos) {
+	   robots.get(robots.size()-1).setPosition(pos.times(1.0/SCALE));
 	   repaint();
    }
    
@@ -44,28 +40,18 @@ public class MyWorld extends JPanel {
       g2.transform(SCALE_TRANSFORM);
       if (maze!=null) {
          maze.draw(g2);
-      }
-      
-      
-      
-      if (robots!=null){
+         
+         }
+      if (robots!=null)
     	  for (int i=0;i<robots.size();i++) 
     		  robots.get(i).draw(g2);
-      }
-           
-      if (mPos!=null){
-    	  System.out.println("posicion mouse");
-        mPos.draw(g2);
-      }
-          	  
       
    }
    
    private Maze maze;
-   private Robot mPos;
    private ArrayList<Robot> robots= new ArrayList<Robot> ();
    private static AffineTransform SCALE_TRANSFORM;
-   private static int SCALE=3;
+   private static double SCALE=3;
 }
 
 
