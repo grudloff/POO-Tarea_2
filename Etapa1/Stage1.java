@@ -67,8 +67,8 @@ class MainFrame extends JFrame {
 
 class MainMenuBar extends JMenuBar implements ActionListener{
    public MainMenuBar (MyWorld parent, MainFrame f){
-	  this.parent=parent;
-	  MyFrame=f;
+	   this.parent=parent;
+	   MyFrame=f;
       JMenu menu1 = new JMenu("File");
       JMenu menu2 = new JMenu("World");
       add(menu1);
@@ -77,18 +77,19 @@ class MainMenuBar extends JMenuBar implements ActionListener{
       menu1.add(item_open);
       JMenuItem item_compile = new JMenuItem("Compile");
       menu1.add(item_compile);
-      JMenuItem item_robot = new JMenuItem("Create Robot");
+      JMenuItem item_robot = new JMenuItem("Create Robot");//Create robot
       JMenuItem item_delta_t = new JMenuItem("Set delta_t");
       menu2.add(item_robot);
       menu2.add(item_delta_t);
       item_open.addActionListener(this);
-      item_robot.addActionListener(new RobotCreationListener());
+      item_robot.addActionListener(new RobotCreationListener());//Create robot
       item_delta_t.addActionListener(new EntradaTexto());
       
       chooser=new JFileChooser();
       chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
       chooser.setFileFilter(new FileNameExtensionFilter("PBM file","pbm"));
       }
+      
    public void actionPerformed(ActionEvent event) {
 	   //actionPerformed asociada al menu Open.
 	    int returnVal = chooser.showOpenDialog(parent);
@@ -106,21 +107,49 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 	       
 	       //Pasarle el maze a MainPanel
 	       parent.setMaze(maze, MyFrame);
-	       
-	       
-	       
-	       
-	       	       
-	       
+	             
 	    }
    }
    
+   
    class RobotCreationListener implements ActionListener{
-		public RobotCreationListener() {
-		}
+		public Vector2D pos_M;
+      
+      
+      public RobotCreationListener(){ 
+      }
 		
+      class Ubicacion extends MouseInputAdapter{
+         public Robot rr;
+         public MyWorld ww;
+         public Vector2D p;
+         
+         public Ubicacion (Robot r,MyWorld w){
+            rr=r;
+            ww=w;
+			}
+         
+         public void mouseMoved(MouseEvent e){
+            System.out.println("x="+e.getX());
+            System.out.println("y="+e.getY());  
+         }
+         public void mouseDragged(MouseEvent e) {
+         }
+         
+         public void mouseClicked(MouseEvent mm) {
+            System.out.println("Click");
+            p =new Vector2D(mm.getX()/3,mm.getY()/3);
+            rr.setPosition(p);
+				ww.setRobot(rr);
+			}
+
+           
+      }  
+             
 		public void actionPerformed(ActionEvent e) {
-			String x=JOptionPane.showInputDialog("Velocidad X: ");
+			
+         
+         String x=JOptionPane.showInputDialog("Velocidad X: ");
 			String y=JOptionPane.showInputDialog("Velocidad Y: ");
 			boolean turn;
 			int selection= JOptionPane.showOptionDialog(null, "\t Elegir el piloto para el robot", "Configuracion piloto",JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] {"Apegado a la pared Izquierda","Apegado a la pared Derecha"}, "Apegado a la pared Derecha");
@@ -128,32 +157,43 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 				turn=true;
 			else
 				turn=false;
-			Vector2D pos=new Vector2D(0,0);
-			Vector2D vel=new Vector2D(Integer.parseInt(x),Integer.parseInt(y));
+			Vector2D pos=new Vector2D(10,10);
+         Vector2D vel=new Vector2D(Integer.parseInt(x),Integer.parseInt(y));
 			Robot robot=new Robot(pos, vel, 3.0, parent, turn);
+			  
+			//addMouseListener(new MouseMovement(robot));// Se activan los eventos de click del mouse estaran activos con MouseMovement
 			
-			addMouseListener(new MouseMovement(robot));
-			//parent.setRobot(robot);
-			}
-		public class MouseMovement extends JPanel implements MouseInputListener{
+         parent.setRobot(robot);
+         Ubicacion ubicro= new Ubicacion(robot,parent);
+         parent.addMouseMotionListener(ubicro);//
+         parent.addMouseListener(ubicro);// 
+         //addMouseListener(ubicro);// Se capturan los eventos del mouse
+         
+		}
+   
+       
+   public class MouseMovement extends JPanel implements MouseInputListener{
 			public int mX, mY;
 			public Robot rr;
+         
 			public MouseMovement(Robot r) {
-				addMouseMotionListener(this);
+				addMouseMotionListener(this);//Recepcion del movimiento del mouse
 				addMouseListener(this);
 				setVisible(true);
 				rr=r;
 			}
 			
+         
 			public void mouseMoved(MouseEvent mm) {
 				mX=(int) mm.getPoint().getX();
 				mY=(int) mm.getPoint().getY();
-				Vector2D mousePos=new Vector2D(mX,mY);
-				rr.setPosition(mousePos);
-				parent.paintRobot(rr);
-				}
+				Vector2D mousePos=new Vector2D(mX,mY);//posicion mouse
+				rr.setPosition(mousePos);//fija la posicion del robot
+				parent.paintRobot(rr);// pinta el robot
+			}
 			
 			public void mouseClicked(MouseEvent mm) {
+            System.out.println("Click");
 				parent.setRobot(rr);
 			}
 			
@@ -162,13 +202,14 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 			public void mouseExited(MouseEvent mm) {}
 			public void mousePressed(MouseEvent mm) {}
 			public void mouseReleased(MouseEvent mm) {}
-		}
+   }
 		
-	}
-
+	
+   }
 	class EntradaTexto implements ActionListener{
 		public EntradaTexto() {
 		}
+      
 		public void actionPerformed(ActionEvent e) {
 			SwingUtilities.invokeLater(new Runnable() {   // implementación Swing recomendada
 	            public void run() {
@@ -196,7 +237,7 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 	}
 	
 	
-	
+
    private double delta_t;
    private JFileChooser chooser;
    private MyWorld parent;

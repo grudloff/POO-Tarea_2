@@ -21,18 +21,19 @@ public class MyWorld extends JPanel {
    public void setMaze(Maze m, MainFrame f) {
    // to be coded
 	   this.maze=m;
-	      setPreferredSize(new Dimension(m.getWidth()*SCALE, m.getHeight()*SCALE));
-	      f.pack();
-	      repaint();
-	   
-   }
-   public void paintRobot(Robot p) {
+	   setPreferredSize(new Dimension(m.getWidth()*SCALE, m.getHeight()*SCALE));
+	   f.pack();
+	   repaint();
+	}
+   
+   public void paintRobot(Robot p) { //Va pintando el robot con el movimiento del mouse
 	   this.mPos=p;
 	   repaint();
    }
    
    public void setRobot(Robot r) {
 	   this.robots.add(r);
+      
 	   repaint();
    }
    
@@ -43,13 +44,19 @@ public class MyWorld extends JPanel {
       g2.transform(SCALE_TRANSFORM);
       if (maze!=null) {
          maze.draw(g2);
-         
-         }
-      if (robots!=null)
+      }
+      
+      
+      
+      if (robots!=null){
     	  for (int i=0;i<robots.size();i++) 
     		  robots.get(i).draw(g2);
-      if (mPos!=null)
-    	  mPos.draw(g2);
+      }
+           
+      if (mPos!=null){
+    	  System.out.println("posicion mouse");
+        mPos.draw(g2);
+      }
           	  
       
    }
