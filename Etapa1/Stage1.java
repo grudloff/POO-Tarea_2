@@ -9,6 +9,7 @@ import javax.swing.filechooser.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import javax.swing.event.*;
 /* 
     El Método main tiene dos implementaciones, una de ellas comentada.
     Las componentes de Swing deben ser configuradas desde la hebra despachadora de eventos
@@ -127,13 +128,42 @@ class MainMenuBar extends JMenuBar implements ActionListener{
 				turn=true;
 			else
 				turn=false;
-			Vector2D pos=new Vector2D(30,40);
+			Vector2D pos=new Vector2D(0,0);
 			Vector2D vel=new Vector2D(Integer.parseInt(x),Integer.parseInt(y));
 			Robot robot=new Robot(pos, vel, 3.0, parent, turn);
-			parent.setRobot(robot);
 			
+			addMouseListener(new MouseMovement(robot));
+			//parent.setRobot(robot);
+			}
+		public class MouseMovement extends JPanel implements MouseInputListener{
+			public int mX, mY;
+			public Robot rr;
+			public MouseMovement(Robot r) {
+				addMouseMotionListener(this);
+				addMouseListener(this);
+				setVisible(true);
+				rr=r;
+			}
 			
+			public void mouseMoved(MouseEvent mm) {
+				mX=(int) mm.getPoint().getX();
+				mY=(int) mm.getPoint().getY();
+				Vector2D mousePos=new Vector2D(mX,mY);
+				rr.setPosition(mousePos);
+				parent.paintRobot(rr);
+				}
+			
+			public void mouseClicked(MouseEvent mm) {
+				parent.setRobot(rr);
+			}
+			
+			public void mouseDragged(MouseEvent mm) {}
+			public void mouseEntered(MouseEvent mm) {}
+			public void mouseExited(MouseEvent mm) {}
+			public void mousePressed(MouseEvent mm) {}
+			public void mouseReleased(MouseEvent mm) {}
 		}
+		
 	}
 
 	class EntradaTexto implements ActionListener{

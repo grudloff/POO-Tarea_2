@@ -24,6 +24,9 @@ public class Robot {
 public Vector2D getPosition() {
    return pos;
 }
+public void setPosition(Vector2D p) {
+	pos=p;
+}
 public Vector2D getVelocity() {
    return v;
 }

@@ -8,6 +8,7 @@ import java.util.*;
 public class MyWorld extends JPanel {
    public MyWorld(){
       maze = null;
+      mPos=null;
    }
    
    {
@@ -25,6 +26,11 @@ public class MyWorld extends JPanel {
 	      repaint();
 	   
    }
+   public void paintRobot(Robot p) {
+	   this.mPos=p;
+	   repaint();
+   }
+   
    public void setRobot(Robot r) {
 	   this.robots.add(r);
 	   repaint();
@@ -42,10 +48,14 @@ public class MyWorld extends JPanel {
       if (robots!=null)
     	  for (int i=0;i<robots.size();i++) 
     		  robots.get(i).draw(g2);
+      if (mPos!=null)
+    	  mPos.draw(g2);
+          	  
       
    }
    
    private Maze maze;
+   private Robot mPos;
    private ArrayList<Robot> robots= new ArrayList<Robot> ();
    private static AffineTransform SCALE_TRANSFORM;
    private static int SCALE=3;
