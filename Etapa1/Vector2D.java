@@ -16,7 +16,7 @@ public class Vector2D {
       return y;
    }
    public Vector2D getUnitary(){
-      return times(getModule());
+      return times(1/getModule());
    }
    public double getModule() {
       return Math.sqrt(x*x+y*y);

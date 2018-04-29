@@ -29,22 +29,14 @@ public class Stage3 {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() { // implementación Swing recomendada
 			public void run() {
-				frame = new MainFrame();
+				MainFrame frame = new MainFrame();
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
 			} // run ends
 		});
 	
 	}
-
-	// esta implementación no es recomendada cuando usamos Swing
-	public static void oldmain(String[] args) {
-		MainFrame frame = new MainFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-	}
 	
-	public static MainFrame frame;
 }
 
 /**
@@ -68,26 +60,31 @@ class MainFrame extends JFrame {
 
 		contentPane.add(world);
 		
-		startTimer();
+		startTimer(1);
 
 	}
 	
-	private void startTimer() {
+	private void startTimer(long a) {
 	    final Timer timer = new Timer();
-	    timer.schedule(new TimerTask() {
+	    timer.scheduleAtFixedRate(new TimerTask() {
 	        public void run() {
 	        	if(MyMainMenu.getFlagDelta_t()){
 	    			timer.cancel(); // cancel time
 	    			MyMainMenu.setFlagDelta_t();
-		            startTimer();   // start the time again with a new delay time
+	    			long a=Math.round(MyMainMenu.getDelta_t()*1000);
+		            startTimer(a);   // start the time again with a new delay time
 	    			}
 		    	if(time.isPlaying()) {
 		    		world.setCourse(MyMainMenu.getDelta_t());
 		    		}
 	        }
 	    //Por alguna razon hacer el casteo a long tira a cero los valores
-	    },0,(long)Math.ceil(MyMainMenu.getDelta_t()*1000));
-	    System.out.println((long)Math.ceil(MyMainMenu.getDelta_t()*1000));
+	    },0,a);
+	    System.out.println(a);
+	}
+	
+	public MyTime getTime() {
+		return time;
 	}
 
 	Timer timer;
@@ -99,9 +96,9 @@ class MainFrame extends JFrame {
 }
 
 class MainMenuBar extends JMenuBar implements ActionListener {
-	public MainMenuBar(MyWorld parent, JFrame jf) {
+	public MainMenuBar(MyWorld parent, MainFrame mf) {
 		this.parent = parent;
-		this.jf = jf;
+		this.mf = mf;
 		JMenu menu1 = new JMenu("File");
 		JMenu menu2 = new JMenu("World");
 		add(menu1);
@@ -148,7 +145,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 			parent.setMaze(maze);
 
 			// Hace un resize para ajustar al contenido
-			jf.pack();
+			mf.pack();
 
 		}
 	}
@@ -183,23 +180,27 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			String x = JOptionPane.showInputDialog("Velocidad X: ");
-			String y = JOptionPane.showInputDialog("Velocidad Y: ");
-			boolean turn;
-			int selection = JOptionPane.showOptionDialog(null, "\t Elegir el piloto para el robot",
-					"Configuracion piloto", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-					new Object[] { "Apegado a la pared Izquierda", "Apegado a la pared Derecha" },
-					"Apegado a la pared Derecha");
-			if (selection == 0)
-				turn = true;
-			else
-				turn = false;
-			Vector2D pos = new Vector2D(0, 0);
-			Vector2D vel = new Vector2D(Double.parseDouble(x), Double.parseDouble(y));
-			Robot robot = new Robot(pos, vel, 7.0, parent, turn);
-			parent.setRobot(robot);
-			flag_mouse = true;
-
+			if(!mf.getTime().isPlaying()) {
+				String x = JOptionPane.showInputDialog("Velocidad X: ");
+				String y = JOptionPane.showInputDialog("Velocidad Y: ");
+				boolean turn;
+				int selection = JOptionPane.showOptionDialog(null, "\t Elegir el piloto para el robot",
+						"Configuracion piloto", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+						new Object[] { "Apegado a la pared Izquierda", "Apegado a la pared Derecha" },
+						"Apegado a la pared Derecha");
+				if (selection == 0)
+					turn = false;
+				else
+					turn = true;
+				Vector2D pos = new Vector2D(0, 0);
+				Vector2D vel = new Vector2D(Double.parseDouble(x), Double.parseDouble(y));
+				Robot robot = new Robot(pos, vel, 7.0, parent, turn);
+				parent.setRobot(robot);
+				flag_mouse = true;
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Debes pausar para crear un nuevo robot", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
@@ -224,7 +225,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 	
 	private boolean flag_deltat=false;
 	private boolean flag_mouse = false;
-	private JFrame jf;
+	private MainFrame mf;
 	private double delta_t=0.001;
 	private JFileChooser chooser;
 	private MyWorld parent;
