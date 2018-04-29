@@ -91,6 +91,8 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		MouseListener mouse = new MouseListener();
 		parent.addMouseMotionListener(mouse);//
 		parent.addMouseListener(mouse);//
+		
+		startTimer();
 
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
