@@ -19,6 +19,14 @@ public class Robot {
 	   pilot = new MyPilot(u);
    }
 
+public void setMaze(Maze maze) {
+	this.maze=new Maze(maze);
+}
+
+public Maze getMaze() {
+	return maze;
+}
+
 public Vector2D getPosition() {
    return pos;
 }
@@ -68,8 +76,9 @@ public String getDescription() {
 public String toString() {
    return pos.toString()+ "," +leftSensor.toString() + frontSensor.toString()+rightSensor.toString()+ ", " +v.toString();
 }
-public void markRoute(Maze m){
-   m.markPoint(pos);
+public void markRoute(){
+	//Cambiao
+   maze.markPoint(pos);
 }
 //
 	public class Pilot {
@@ -209,6 +218,7 @@ public void markRoute(Maze m){
 	   view.draw(g);
 	   }
       
+   private Maze maze;
    private Vector2D pos;
    private Vector2D v;
    private MyWorld world;

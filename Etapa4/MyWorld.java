@@ -1,5 +1,8 @@
 import java.awt.*;
 import java.awt.geom.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 import javax.swing.*;
 import javax.swing.JComponent.*;
@@ -29,7 +32,9 @@ public class MyWorld extends JPanel {
 	   
    }
    public void setRobot(Robot r) {
+	   r.setMaze(maze);
 	   this.robots.add(r);
+	   this.printRoute.add(true);
 	   repaint();
    }
    public void setRobotPos(Vector2D pos) {
@@ -45,7 +50,18 @@ public class MyWorld extends JPanel {
 		   robot=robots.get(i);
 		   if(!((robot.getPosition().minus(exit).getModule()<exitRadius))) {
 			   robot.moveDelta_t(delta_t);
+			   robot.markRoute();
 			   }
+		   else if(printRoute.get(i)){
+			   //imprimir maze del robot
+			   printRoute.set(i, false);
+			   try {
+			   PrintStream out=new PrintStream(new File("maze_out_"+i+".pbm"));
+			   robot.getMaze().write(out);
+			   }catch (FileNotFoundException t) {
+
+			   }
+		   }
 	   }
 	   repaint();
    }
@@ -72,6 +88,7 @@ public class MyWorld extends JPanel {
    private double exitRadius;
    private Vector2D exit;
    private Maze maze;
+   private ArrayList<Boolean> printRoute = new ArrayList<Boolean> ();
    private ArrayList<Robot> robots= new ArrayList<Robot> ();
    private static AffineTransform SCALE_TRANSFORM;
    private static double SCALE=3;
