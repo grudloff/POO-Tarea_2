@@ -50,28 +50,8 @@ class MainFrame extends JFrame {
 
 		contentPane.add(world);
 		
-//		startTimer(1);
 
 	}
-	
-//	private void startTimer(long a) {
-//	    final Timer timer = new Timer();
-//	    timer.scheduleAtFixedRate(new TimerTask() {
-//	        public void run() {
-//	        	if(MyMainMenu.getFlagDelta_t()){
-//	    			timer.cancel(); // cancel time
-//	    			MyMainMenu.setFlagDelta_t();
-//	    			long a=Math.round(MyMainMenu.getDelta_t()*1000);
-//		            startTimer(a);   // start the time again with a new delay time
-//	    			}
-//		    	if(time.isPlaying()) {
-//		    		world.setCourse(MyMainMenu.getDelta_t());
-//		    		}
-//	        }
-//	    //Por alguna razon hacer el casteo a long tira a cero los valores
-//	    },0,a);
-//	    System.out.println(a);
-//	}
 	
 	public MyTime getTime() {
 		return time;
@@ -81,7 +61,6 @@ class MainFrame extends JFrame {
 		return world;
 	}
 
-//	Timer timer;
 	MainMenuBar MyMainMenu;
 	MyTime time;
 	MyWorld world;
@@ -118,9 +97,6 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		chooser.setFileFilter(new FileNameExtensionFilter("PBM file", "pbm"));
 	}
 	
-	public double getDelta_t() {
-		return delta_t;
-	}
 
 	//Menu open
 	public void actionPerformed(ActionEvent event) {
@@ -136,7 +112,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 
 			}
 
-			// Pasarle el maze a MainPanel
+			// Pasarle el maze a MyWorld
 			parent.setMaze(maze);
 
 			// Hace un resize para ajustar al contenido
@@ -214,11 +190,6 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 	    timer = new Timer();
 	    timer.scheduleAtFixedRate(new TimerTask() {
 	        public void run() {
-//	        	if(MyMainMenu.getFlagDelta_t()){
-//	    			timer.cancel(); // cancel time
-//	    			MyMainMenu.setFlagDelta_t();
-//		            startTimer(a);   // start the time again with a new delay time
-//	    			}
 		    	if(time.isPlaying()) {
 		    		parent.setCourse(delta_t);
 		    		}
@@ -226,14 +197,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 	    //Por alguna razon hacer el casteo a long tira a cero los valores
 	    },0,Math.round(delta_t*1000));
 	}
-	
-//	public boolean getFlagDelta_t() {
-//		return flag_deltat;
-//	}
-	
-//	public void setFlagDelta_t() {
-//		flag_deltat=false;
-//	}
+
 	
 	private Timer timer;
 	private MyTime time;
