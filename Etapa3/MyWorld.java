@@ -44,6 +44,7 @@ public class MyWorld extends JPanel {
 	   for (int i=0;i<robots.size();i++) {
 		   robot=robots.get(i);
 		   if(!((robot.getPosition().minus(exit).getModule()<exitRadius))) {
+			   System.out.println(robot.getPosition().getX()+" "+robot.getPosition().getY());
 			   robot.moveDelta_t(delta_t);
 			   }
 	   }

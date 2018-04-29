@@ -13,17 +13,6 @@ import java.io.*;
 import javax.swing.event.*;
 import java.util.Timer;
 import java.util.TimerTask;
-/* 
-    El Método main tiene dos implementaciones, una de ellas comentada.
-    Las componentes de Swing deben ser configuradas desde la hebra despachadora de eventos
-    ésta es la hebra que pasa los eventos tales como clicks del mouse, teclas, etc 
-    a las componentes de la interfaz usuario. 
-    Es posible utilizar la versión comenatda para iniciar la interfaz usuario; sin emabrgo,
-    las componetes de Swing aumentaron su complejidad y hoy no se logra garantizar la seguridad
-    de la inicialización antigua. La probabilida de problemas es baja, pero no querrás ser 
-    de aquellos sin suerte que enfrentan problemas intermitentes. Es mejor usar este
-    mecanismo aún cuando el código luzca extraño. 
-*/
 
 public class Stage3 {
 	public static void main(String[] args) {
@@ -47,7 +36,7 @@ class MainFrame extends JFrame {
 		setTitle("ELO329: Robots en Laberinto");
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		world = new MyWorld();
-		Vector2D exit=new Vector2D(190,225);
+		Vector2D exit=new Vector2D(206,176);
 		double exitRadius=10;
 		world.setExit(exit,exitRadius);
 
