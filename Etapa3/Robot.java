@@ -176,17 +176,26 @@ public void markRoute(Maze m){
 			int size_s=3;
 			
 			//pintar sensor frontal
-			g.setColor(Color.blue);
+			if(frontSensor.senseWall())
+				g.setColor(Color.green);
+			else
+				g.setColor(Color.blue);
 			v=pos.plus( frontSensor.dir.times(4.0));
 			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)), size_s, size_s);
 			
 			//pintar sensor derecho
-			g.setColor(Color.blue);
+			if(rightSensor.senseWall())
+				g.setColor(Color.green);
+			else
+				g.setColor(Color.blue);
 			v=pos.plus( rightSensor.dir.times(4.0));
 			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)),size_s,size_s);
 			
 			//pintar sensor izquierdo
-			g.setColor(Color.blue);
+			if(leftSensor.senseWall())
+				g.setColor(Color.green);
+			else
+				g.setColor(Color.blue);
 			v=pos.plus( leftSensor.dir.times(4.0));
 			g.fillOval((int)(v.getX()-Math.floor(size_s*0.5)),(int)(v.getY()-Math.floor(size_s*0.5)),size_s,size_s);
 			
@@ -194,7 +203,6 @@ public void markRoute(Maze m){
 			g.setColor(Color.black);
 			
 		}
-
 		 
 	}
    

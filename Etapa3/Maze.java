@@ -37,9 +37,11 @@ public class Maze {
             array[h][w]=m.array[h][w];   
    }
    public boolean isThere_a_wall(int x, int y) {
-      if ((x < array.length) && (y < array[0].length) )
+	   // x,y pueden ser negativos por lo que se agrego la condición
+      if ((x>=0)&&(x < array.length) && (y>=0)&&(y < array[0].length) ) {
          return array[x][y];
-      else return false;
+      }
+      else return true;
    }
    public void markPoint(Vector2D p){
       int x=(int)p.getX(), y=(int)p.getY();

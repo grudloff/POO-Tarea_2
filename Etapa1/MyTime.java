@@ -22,6 +22,7 @@ public class MyTime {
    public JButton getView () {
       return view;
    }
+   
    private boolean playing; // object model
    private JButton view;   // object view
    private ImageIcon playIcon, pauseIcon; // used by view
