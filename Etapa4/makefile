@@ -9,7 +9,7 @@ FILE=
 CLASSES = \
         MyWorld.java \
         Maze.java \
-        Stage2.java \
+        Stage4.java \
         Vector2D.java \
 	Robot.java \
 	MyTime.java 
