@@ -94,21 +94,24 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		
 		startTimer();
 
+		chooser_pbm = new JFileChooser();
+		chooser_pbm.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		chooser_pbm.setFileFilter(new FileNameExtensionFilter("PBM file", "pbm"));
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-		chooser.setFileFilter(new FileNameExtensionFilter("PBM file", "pbm"));
+		//chooser.setFileFilter(new FileNameExtensionFilter("PBM file", "pbm"));
 	}
 	
 
 	//Menu open
 	public void actionPerformed(ActionEvent event) {
 		// actionPerformed asociada al menu Open.
-		int returnVal = chooser.showOpenDialog(parent);
+		int returnVal = chooser_pbm.showOpenDialog(parent);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+			System.out.println("You chose to open this file: " + chooser_pbm.getSelectedFile().getName());
 			// Crear el Maze desde el archivo entregado en JFileChooser
 			try {
-				in = new Scanner(new File((String) chooser.getSelectedFile().getName()));
+				in = new Scanner(new File((String) chooser_pbm.getSelectedFile().getName()));
 				maze = new Maze(in);
 			} catch (FileNotFoundException t) {
 
@@ -124,7 +127,6 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 	}
 
 	class MouseListener extends MouseInputAdapter {
-		// public Vector2D p;
 		int mX, mY;
 		Vector2D mousePos;
 
@@ -168,13 +170,27 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 				Vector2D pos = new Vector2D(0, 0);
 				Vector2D vel = new Vector2D(Double.parseDouble(x), Double.parseDouble(y));
 				Robot robot = new Robot(pos, vel, 7.0, parent, turn);
-				parent.setRobot(robot);
-				flag_mouse = true;
+				
+				int returnVal = chooser.showOpenDialog(parent);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					System.out.println("You chose to save in this file: " + chooser.getSelectedFile().getName());
+					// Crear el Maze desde el archivo entregado en JFileChooser
+					try {
+					PrintStream out=new PrintStream(new File((String) chooser.getSelectedFile().getName()));
+					parent.setRobot(robot,out);
+					flag_mouse = true;
+					} catch (FileNotFoundException t) {
+
+					}
+					
+					
+					
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Debes pausar para crear un nuevo robot", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
 	}
 
 	class EntradaTexto implements ActionListener {
@@ -184,21 +200,29 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String dt = JOptionPane.showInputDialog("Diferencial de tiempo: ");
 			delta_t = Double.parseDouble(dt);
+			//Se inicia un timer para realizar movimiento de robot cada un deltaT
 			startTimer();
 		}
 	}
 	
+	
 	private void startTimer() {
+		//Se detiene el timer anterior
+		if (timer !=null)
+			timer.cancel();
+		//Se crea un nuevo timer
 	    timer = new Timer();
+	    //Corre lo contenido en run cada un deltaT
 	    timer.scheduleAtFixedRate(new TimerTask() {
 	        public void run() {
 		    	if(time.isPlaying()) {
 		    		parent.setCourse(delta_t);
 		    		}
 	        }
-	    //Por alguna razon hacer el casteo a long tira a cero los valores
+	    //delay inicial y step de tiempo
 	    },0,Math.round(delta_t*1000));
 	}
+
 
 	
 	private Timer timer;
@@ -206,9 +230,10 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 	private boolean flag_mouse = false;
 	private MainFrame mf;
 	private double delta_t=0.001;
-	private JFileChooser chooser;
+	private JFileChooser chooser_pbm,chooser;
 	private MyWorld parent;
 	private Scanner in;
 	private Maze maze;
 
 }
+

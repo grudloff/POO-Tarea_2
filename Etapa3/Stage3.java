@@ -37,46 +37,30 @@ class MainFrame extends JFrame {
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		world = new MyWorld();
 		Vector2D exit=new Vector2D(206,176);
-		double exitRadius=10;
+		double exitRadius=15;
 		world.setExit(exit,exitRadius);
 
-		// add Menu bar to frame
-		MyMainMenu=new MainMenuBar(world, this);
-		setJMenuBar(MyMainMenu);
 		time = new MyTime();
+		// add Menu bar to frame
+		MyMainMenu=new MainMenuBar(this);
+		setJMenuBar(MyMainMenu);
+		
 		Container contentPane = getContentPane();
 		contentPane.add(time.getView(), BorderLayout.SOUTH);
 
 		contentPane.add(world);
 		
-		startTimer(1);
 
-	}
-	
-	private void startTimer(long a) {
-	    final Timer timer = new Timer();
-	    timer.scheduleAtFixedRate(new TimerTask() {
-	        public void run() {
-	        	if(MyMainMenu.getFlagDelta_t()){
-	    			timer.cancel(); // cancel time
-	    			MyMainMenu.setFlagDelta_t();
-	    			long a=Math.round(MyMainMenu.getDelta_t()*1000);
-		            startTimer(a);   // start the time again with a new delay time
-	    			}
-		    	if(time.isPlaying()) {
-		    		world.setCourse(MyMainMenu.getDelta_t());
-		    		}
-	        }
-	    //Por alguna razon hacer el casteo a long tira a cero los valores
-	    },0,a);
-	    System.out.println(a);
 	}
 	
 	public MyTime getTime() {
 		return time;
 	}
+	
+	public MyWorld getMyWorld() {
+		return world;
+	}
 
-	Timer timer;
 	MainMenuBar MyMainMenu;
 	MyTime time;
 	MyWorld world;
@@ -85,8 +69,9 @@ class MainFrame extends JFrame {
 }
 
 class MainMenuBar extends JMenuBar implements ActionListener {
-	public MainMenuBar(MyWorld parent, MainFrame mf) {
-		this.parent = parent;
+	public MainMenuBar(MainFrame mf) {
+		this.time = mf.getTime();
+		this.parent=mf.getMyWorld();
 		this.mf = mf;
 		JMenu menu1 = new JMenu("File");
 		JMenu menu2 = new JMenu("World");
@@ -106,15 +91,14 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		MouseListener mouse = new MouseListener();
 		parent.addMouseMotionListener(mouse);//
 		parent.addMouseListener(mouse);//
+		
+		startTimer();
 
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		chooser.setFileFilter(new FileNameExtensionFilter("PBM file", "pbm"));
 	}
 	
-	public double getDelta_t() {
-		return delta_t;
-	}
 
 	//Menu open
 	public void actionPerformed(ActionEvent event) {
@@ -130,7 +114,7 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 
 			}
 
-			// Pasarle el maze a MainPanel
+			// Pasarle el maze a MyWorld
 			parent.setMaze(maze);
 
 			// Hace un resize para ajustar al contenido
@@ -140,7 +124,6 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 	}
 
 	class MouseListener extends MouseInputAdapter {
-		// public Vector2D p;
 		int mX, mY;
 		Vector2D mousePos;
 
@@ -200,19 +183,31 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String dt = JOptionPane.showInputDialog("Diferencial de tiempo: ");
 			delta_t = Double.parseDouble(dt);
-			flag_deltat=true;
+			//Se inicia un timer para realizar movimiento de robot cada un deltaT
+			startTimer();
 		}
 	}
 	
-	public boolean getFlagDelta_t() {
-		return flag_deltat;
+	private void startTimer() {
+		//Se detiene el timer anterior
+		if (timer !=null)
+			timer.cancel();
+		//Se crea un nuevo timer
+	    timer = new Timer();
+	    //Corre lo contenido en run cada un deltaT
+	    timer.scheduleAtFixedRate(new TimerTask() {
+	        public void run() {
+		    	if(time.isPlaying()) {
+		    		parent.setCourse(delta_t);
+		    		}
+	        }
+	    //delay inicial y step de tiempo
+	    },0,Math.round(delta_t*1000));
 	}
+
 	
-	public void setFlagDelta_t() {
-		flag_deltat=false;
-	}
-	
-	private boolean flag_deltat=false;
+	private Timer timer;
+	private MyTime time;
 	private boolean flag_mouse = false;
 	private MainFrame mf;
 	private double delta_t=0.001;

@@ -31,10 +31,12 @@ public class MyWorld extends JPanel {
 	   repaint();
 	   
    }
-   public void setRobot(Robot r) {
+   public void setRobot(Robot r,PrintStream out) {
 	   r.setMaze(maze);
 	   this.robots.add(r);
 	   this.printRoute.add(true);
+	   out.println("t,x,y");
+	   this.RouteFiles.add(out);	   
 	   repaint();
    }
    public void setRobotPos(Vector2D pos) {
@@ -45,12 +47,15 @@ public class MyWorld extends JPanel {
    
    public void setCourse(double delta_t) {
 	   Robot robot;
+	   PrintStream RouteFile;
 	   
 	   for (int i=0;i<robots.size();i++) {
 		   robot=robots.get(i);
+		   RouteFile=RouteFiles.get(i);
 		   if(!((robot.getPosition().minus(exit).getModule()<exitRadius))) {
 			   robot.moveDelta_t(delta_t);
 			   robot.markRoute();
+			   RouteFile.println(t+","+robot.getPosition().getX()+","+robot.getPosition().getY());
 			   }
 		   else if(printRoute.get(i)){
 			   //imprimir maze del robot
@@ -63,6 +68,7 @@ public class MyWorld extends JPanel {
 			   }
 		   }
 	   }
+	   t+=delta_t;
 	   repaint();
    }
    
@@ -85,11 +91,13 @@ public class MyWorld extends JPanel {
 	   this.exitRadius=exitRadius;
    }
    
+   double t=0;
    private double exitRadius;
    private Vector2D exit;
    private Maze maze;
    private ArrayList<Boolean> printRoute = new ArrayList<Boolean> ();
    private ArrayList<Robot> robots= new ArrayList<Robot> ();
+   private ArrayList<PrintStream> RouteFiles= new ArrayList<PrintStream> ();
    private static AffineTransform SCALE_TRANSFORM;
    private static double SCALE=3;
 }
