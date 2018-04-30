@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 import javax.swing.*;
-import javax.swing.JComponent.*;
 import java.util.*;
 
 public class MyWorld extends JPanel {

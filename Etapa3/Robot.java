@@ -2,11 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Robot {
-   private Robot() { 
-      this(new Vector2D(), new Vector2D(), 0, null,false);
-   }
    public Robot(Vector2D position, Vector2D velocity, double sensorRange, MyWorld w,boolean u) {
-	   this.u=u;
 	   pos = position;
 	   v = velocity;
 	   world = w;
@@ -16,8 +12,19 @@ public class Robot {
 	   leftSensor = new DistanceSensor(new Vector2D(-dir.getY(), dir.getX()), sensorRange);
    // similar to Robot in previous stage without the logic to set the course
    /// that ti is now asked to the pilot
-	   pilot = new MyPilot(u);
+	   if(u)
+		   pilot = new PilotL();
+	   else
+		   pilot= new PilotR();
    }
+
+public void setMaze(Maze maze) {
+	this.maze=new Maze(maze);
+}
+
+public Maze getMaze() {
+	return maze;
+}
 
 public Vector2D getPosition() {
    return pos;
@@ -54,13 +61,7 @@ public DistanceSensor getFrontSensor() {
 	return frontSensor;
 }
 public void moveDelta_t(double delta_t) {
-		if(!u) {
 	   pilot.setCourse(delta_t);
-		}
-		else {
-			pilot.setCourse2(delta_t);
-		}
-	   return;
 }
 public String getDescription() {
    return pos.getDescription() + ",  leftS frontS rightS";
@@ -68,15 +69,20 @@ public String getDescription() {
 public String toString() {
    return pos.toString()+ "," +leftSensor.toString() + frontSensor.toString()+rightSensor.toString()+ ", " +v.toString();
 }
-public void markRoute(Maze m){
-   m.markPoint(pos);
+public void markRoute(){
+	//Cambiao
+   maze.markPoint(pos);
 }
 //
-	public class Pilot {
-	   public Pilot(){
+	private interface Pilot{
+		public void setCourse(double delta_t);
+	}
+
+	private class PilotR implements Pilot{
+
 		   // set the lookingForRightWall depending on the left sensor state
-		   lookingFor=!rightSensor.senseWall();
-	   }
+		private boolean lookingFor=!rightSensor.senseWall();
+	   
 	   public void setCourse(double delta_t){
 		   if(leftSensor.senseWall()) {
 			   turnRight();
@@ -99,15 +105,12 @@ public void markRoute(Maze m){
 		  lookingFor=true;
 		  return;   
 	   }
-	   private boolean lookingFor; //it is used to find the right wall at the beginning
 	}
-	public class MyPilot extends Pilot{
-	   public MyPilot(boolean u){
-		   //Cuando es true se usa la alternativa 2
-		   super();
-		   if(u)	lookingFor=!leftSensor.senseWall();
-	   }
-	   public void setCourse2(double delta_t){
+	private class PilotL implements Pilot{
+
+		private boolean lookingFor=!leftSensor.senseWall();
+
+	   public void setCourse(double delta_t){
 		   if(rightSensor.senseWall()) {
 			   turnLeft();
 			  return;
@@ -130,9 +133,8 @@ public void markRoute(Maze m){
 		  return;   
 	   }
 	   
-	   private boolean lookingFor; //it is used to find the right/left wall at the beginning and in corners
 	}
-   public class DistanceSensor {  // now public because it is also used my Pilot
+   private class DistanceSensor {  
 	   public DistanceSensor(Vector2D dir, double range) {
 	         this.dir = dir;
 	         this.range = range;
@@ -161,7 +163,7 @@ public void markRoute(Maze m){
 	      private static final double presition = 0.4;
    }
    
-   public class RobotView {
+   private class RobotView {
 		public RobotView() {}
 
 		public void draw(Graphics2D g) {
@@ -209,10 +211,10 @@ public void markRoute(Maze m){
 	   view.draw(g);
 	   }
       
+   private Maze maze;
    private Vector2D pos;
    private Vector2D v;
    private MyWorld world;
    private DistanceSensor rightSensor, frontSensor, leftSensor;
-   private MyPilot pilot;
-   private boolean u;
+   private Pilot pilot;
 }

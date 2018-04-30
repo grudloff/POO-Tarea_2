@@ -2,9 +2,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Robot {
-   private Robot() { 
-      this(new Vector2D(), new Vector2D(), 0, null,false);
-   }
    public Robot(Vector2D position, Vector2D velocity, double sensorRange, MyWorld w,boolean u) {
 	   this.u=u;
 	   pos = position;

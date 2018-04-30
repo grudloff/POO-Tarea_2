@@ -1,10 +1,6 @@
 import java.io.*;
 import java.util.*;
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.Graphics2D.*;
-import javax.swing.*;
-import javax.swing.JComponent.*;
 
 public class Maze {
    protected Maze(){}

@@ -79,8 +79,6 @@ class MainMenuBar extends JMenuBar implements ActionListener {
 		add(menu2);
 		JMenuItem item_open = new JMenuItem("Open");
 		menu1.add(item_open);
-		JMenuItem item_compile = new JMenuItem("Compile");
-		menu1.add(item_compile);
 		JMenuItem item_robot = new JMenuItem("Create Robot");
 		JMenuItem item_delta_t = new JMenuItem("Set delta_t");
 		menu2.add(item_robot);
