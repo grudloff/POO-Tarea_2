@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 /** Clase Robot 
 *  Esta clase alberga al robot que recorrera el laberinto y que puede ser posicionado de forma arbitraria
 *  cuya forma de ser pilotado tambien puede ser establecida
-*  @param position entrega las coordenadas en las que se encontrará el robot dentro del laberinto
+*  @param position entrega las coordenadas en las que| robot dentro del laberinto
 *  @param velocity es el vector velocidad que indica cuanto avanzara el robot por unidad de tiempo
 *  @param sensorRange corresponde al rango del sensor que detecta las paredes cercanas al robot
 *  @param w entrega una clase que hereda de JPanel atributos y metodos para modificar y mostrar en pantalla
