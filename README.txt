@@ -1,5 +1,3 @@
-
-
 TAREA 2
 Este programa consiste en continuar trabajando en lo realizado en la Tarea 1 pero esta vez hacerlo de manera gráfica. Mediante una ventana o frame, se espera poder configurar al robot y poder establecer el laberinto utilizado mediante un archivo pbm que se encuentre en el directorio del proyecto. Existen otras opciones que tienen como finalidad modifcar parámetros del robot para que este pueda recorrer el laberinto.
 INSTALACIONES PREVIAS:
