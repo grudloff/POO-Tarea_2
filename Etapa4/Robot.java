@@ -1,6 +1,15 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+/** Clase Robot 
+*  Esta clase alberga al robot que recorrera el laberinto y que puede ser posicionado de forma arbitraria
+*  cuya forma de ser pilotado tambien puede ser establecida
+*  @param position entrega las coordenadas en las que se encontrará el robot dentro del laberinto
+*  @param velocity es el vector velocidad que indica cuanto avanzara el robot por unidad de tiempo
+*  @param sensorRange corresponde al rango del sensor que detecta las paredes cercanas al robot
+*  @param w entrega una clase que hereda de JPanel atributos y metodos para modificar y mostrar en pantalla
+*  @param u corresponde al flag que dice que piloto debe utilizarse
+*/
 public class Robot {
    public Robot(Vector2D position, Vector2D velocity, double sensorRange, MyWorld w,boolean u) {
 	   pos = position;
@@ -18,23 +27,55 @@ public class Robot {
 		   pilot= new PilotR();
    }
 
+/** setMaze 
+*   Metodo para fijar el laberinto utilizado
+*   @param maze laberinto utilizado para el robot  
+*/
+
 public void setMaze(Maze maze) {
 	this.maze=new Maze(maze);
 }
 
+/** getMaze    
+*   Metodo que retorna el laberinto utilizado
+*   @return maze que es el laberinto utilizado
+*/
 public Maze getMaze() {
 	return maze;
 }
 
+/** getPosition
+*   Entrega la posicion actual del robot  
+*   @return pos es la posicion del robot
+*
+*/
 public Vector2D getPosition() {
    return pos;
 }
+
+/** setPosition
+*   Fija una posicion nueva para el robot
+*   @param posicion que se quiere fijar
+*
+*/
 public void setPosition(Vector2D pos) {
 	this.pos=pos;
 }
+
+/** getVelocity
+*   Obtiene la velocidad actual del robot
+*   @return velocidad del robot
+*
+*/
 public Vector2D getVelocity() {
    return v;
 }
+
+/** turnLeft
+*   Hace que el robot gire hacia la izquierda
+*  
+*
+*/
 public void turnLeft(){
    v.turnLeft();
    rightSensor.turnLeft();
@@ -43,6 +84,12 @@ public void turnLeft(){
    //System.out.println("turning left...");  // for debugging
    return; 
 }
+
+/** turnRight
+*   Hace que el robot gire hacia la derecha
+*   
+*
+*/
 public void turnRight(){
    v.turnRight();
    rightSensor.turnRight();
@@ -51,38 +98,96 @@ public void turnRight(){
    //System.out.println("turning right...");
    return; 
 }
+
+/** getRightSensor
+*   Obtener el sensor derecho
+*   @return sensor derecho
+*
+*/
 public DistanceSensor getRightSensor() {
 	return rightSensor;
 }
+
+/** getLeftSensor
+*   Obtener el sensor izquierdo
+*   @return sensor izquierdo
+*
+*/
 public DistanceSensor getLeftSensor() {
 	return leftSensor;
 }
+/** getFrontSensor
+*   Obtener el sensor frontal
+*   @return sensor frontal
+*
+*/
 public DistanceSensor getFrontSensor() {
 	return frontSensor;
 }
+
+/** moveDelta_t
+*   Fija el periodo de muestreo de la simulacion
+*   @param valor del periodo de muestreo
+*
+*/
 public void moveDelta_t(double delta_t) {
 	   pilot.setCourse(delta_t);
 }
+
+/** getDescription()
+*   Entrega la informacion correspondiente a los 3  sensores
+*   @return Informacion en formato string
+*
+*/
 public String getDescription() {
    return pos.getDescription() + ",  leftS frontS rightS";
 }
+
+/** toString()
+*   Reune la informacion de los tres sensores
+*   @return Informacion en formato string de los tres sensores juntos
+*
+*/
 public String toString() {
    return pos.toString()+ "," +leftSensor.toString() + frontSensor.toString()+rightSensor.toString()+ ", " +v.toString();
 }
+
+/** markRoute()
+*   Marca la ruta correspondiente al robot
+*   
+*
+*/
 public void markRoute(){
 	//Cambiao
    maze.markPoint(pos);
 }
-//
+   
+   /** Pilot
+   *   Interfaz que contiene metodos para pilotear el robot
+   *   
+   *
+   */
 	private interface Pilot{
+      /** setCourse
+      *   Metodo que funciona para fijar el periodo de muestreo
+      *   dependiendo de la direccion del robot
+      *   @param perido de muestreo
+      *
+      */
 		public void setCourse(double delta_t);
 	}
-
+   
+   /** PilotR   
+   *   Clase que sirve para pilotear a la derecha el robot
+   *     
+   *
+   */
 	private class PilotR implements Pilot{
 
 		   // set the lookingForRightWall depending on the left sensor state
 		private boolean lookingFor=!rightSensor.senseWall();
 	   
+       
 	   public void setCourse(double delta_t){
 		   if(leftSensor.senseWall()) {
 			   turnRight();
@@ -106,6 +211,12 @@ public void markRoute(){
 		  return;   
 	   }
 	}
+   
+   /** PilotL   
+   *   Clase que sirve para pilotear a la izquierda el robot
+   *     
+   *
+   */
 	private class PilotL implements Pilot{
 
 		private boolean lookingFor=!leftSensor.senseWall();
@@ -134,17 +245,32 @@ public void markRoute(){
 	   }
 	   
 	}
+   /** DistanceSensor
+   *  Clase que trabaja la distancia del sensor
+   *  @param dir corresponde a la direccion donde apunta el sensor
+   *  @param range corresponde al rango establecido para el sensor
+   */
    private class DistanceSensor {  
 	   public DistanceSensor(Vector2D dir, double range) {
 	         this.dir = dir;
 	         this.range = range;
 	      }
+         /**turnLeft
+         *  Metodo que provee el gito hacia la izquierda del sensor 
+         */
 	      public void turnLeft(){
 	         dir.turnLeft();
 	      }
+         /**turnRight
+         *  Metodo que provee el gito hacia la derecha del sensor 
+         */         
 	      public void turnRight() {
 	         dir.turnRight();
 	      }
+         /**senseWall
+         *  Metodo que verifica la existencia de alguna muralla cercana
+         *  @return verdadero si existe muralla o falso si es que no la hay 
+         */         
 	      public boolean senseWall(){
 	    	  Vector2D s = new Vector2D();
 	    	  for(float i=0;i<range;i+=presition) {
@@ -154,6 +280,11 @@ public void markRoute(){
 	    	  }
 	    	  return false;
 	      }
+         
+         /** toString
+         *   Metodo que entrega la informacion de senWall
+         *   @return Palabra correspondiente a la informacion de sensWall 
+         */
 	      public String toString() {
 	         return " "+senseWall();
 	      }
@@ -163,9 +294,17 @@ public void markRoute(){
 	      private static final double presition = 0.4;
    }
    
+   /** Clase RobotView
+   *   Esta es la clase anidada dentro de Robot que permite dibujar al robot dentro
+   *   del laberinto.
+   */
    private class RobotView {
 		public RobotView() {}
-
+      
+      /**draw
+      *  Metodo que pinta en el frame el robot
+      *  @param Imagen que sera repintada  
+      */
 		public void draw(Graphics2D g) {
 			//Pintar cuerpo del robot
 			g.setColor(Color.orange);

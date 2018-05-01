@@ -1,4 +1,4 @@
-wJFLAGS = -g
+JFLAGS = -g
 JC = javac
 JVM= java
 FILE=
@@ -25,3 +25,5 @@ run: $(MAIN).class
 
 clean:
 	$(RM) *.class
+doc:
+	javadoc -d documentacion Robot.java

@@ -1,4 +1,4 @@
-wJFLAGS = -g
+JFLAGS = -g
 JC = javac
 JVM= java
 FILE=
